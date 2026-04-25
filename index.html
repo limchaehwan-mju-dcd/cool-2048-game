@@ -5,6 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>2048 Master</title>
+    <link rel="manifest" href="manifest.webmanifest">
+    <meta name="theme-color" content="#667eea">
+    <link rel="icon" type="image/svg+xml" href="icon.svg">
+    <link rel="apple-touch-icon" href="icon.svg">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="2048">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
@@ -564,6 +571,7 @@
             <div class="score-value" id="best-score">0</div>
         </div>
         <button class="ranking-btn" id="ranking-btn" type="button">🏆 랭킹</button>
+        <button class="ranking-btn" id="install-btn" type="button" hidden>📥 설치</button>
     </div>
     <div id="game-container">
         <div class="grid-container" id="grid-bg"></div>
@@ -1057,6 +1065,44 @@
         lbOverlay.addEventListener('click', e => {
             if (e.target === lbOverlay) lbOverlay.classList.remove('show');
         });
+
+        // ============================
+        // PWA 설치 + Service Worker
+        // ============================
+        const installBtn = document.getElementById('install-btn');
+        let deferredPrompt = null;
+
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+            || window.navigator.standalone === true;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (!isStandalone) installBtn.hidden = false;
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            try {
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') installBtn.hidden = true;
+            } catch (_) { /* noop */ }
+            deferredPrompt = null;
+        });
+
+        window.addEventListener('appinstalled', () => {
+            installBtn.hidden = true;
+            deferredPrompt = null;
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').catch(() => {
+                    // 로컬 file:// 환경 등 SW 미지원이어도 게임은 정상 동작
+                });
+            });
+        }
 
         init();
     </script>

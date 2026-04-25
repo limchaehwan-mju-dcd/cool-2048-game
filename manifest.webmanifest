@@ -1,0 +1,20 @@
+{
+  "name": "2048 Master",
+  "short_name": "2048",
+  "description": "클래식 2048 퍼즐 게임 + 클라우드 리더보드",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0f0f1e",
+  "theme_color": "#667eea",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any maskable"
+    }
+  ]
+}
