@@ -158,6 +158,7 @@
             width: 102px;
             height: 102px;
             border-radius: 12px;
+            will-change: transform, top, left;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -397,6 +398,158 @@
                 opacity: 1;
             }
         }
+
+        /* 작업 3: 리더보드 UI */
+        .ranking-btn {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 16px 24px;
+            color: #fff;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+        .ranking-btn:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .submit-form {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .submit-form[hidden] { display: none; }
+
+        #nickname-input {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 12px 16px;
+            color: #fff;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 16px;
+            width: 200px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        #nickname-input:focus {
+            border-color: rgba(102, 126, 234, 0.6);
+        }
+        #nickname-input:disabled { opacity: 0.6; }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            color: #fff;
+            font-family: "Space Grotesk", sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.2s ease;
+        }
+        .submit-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(102, 126, 234, 0.6);
+        }
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .lb-error {
+            color: #ff8a8a;
+            font-size: 14px;
+            margin-bottom: 12px;
+            min-height: 0;
+        }
+        .lb-error[hidden] { display: none; }
+
+        .lb-section[hidden] { display: none; }
+
+        .lb-title {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .leaderboard-list {
+            list-style: none;
+            margin: 0 0 24px;
+            padding: 0;
+            text-align: left;
+            max-height: 280px;
+            overflow-y: auto;
+        }
+        .leaderboard-list li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            margin-bottom: 4px;
+            background: rgba(255, 255, 255, 0.03);
+        }
+        .leaderboard-list li.me {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.35) 0%, rgba(118, 75, 162, 0.35) 100%);
+            color: #fff;
+            font-weight: 600;
+        }
+        .leaderboard-list .rank { width: 28px; opacity: 0.7; }
+        .leaderboard-list .nick { flex: 1; padding: 0 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .leaderboard-list .sc { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+        #leaderboard-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease-out;
+        }
+        #leaderboard-overlay.show { display: flex; }
+
+        .lb-content {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 32px 40px;
+            text-align: center;
+            min-width: 360px;
+            max-width: 90vw;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (max-width: 600px) {
+            .ranking-btn { padding: 12px 18px; font-size: 12px; }
+            #nickname-input { width: 160px; font-size: 14px; }
+            .game-over-content { padding: 32px 24px; }
+            .lb-content { padding: 24px 20px; min-width: 280px; }
+            .game-over-title { font-size: 40px; }
+        }
     </style>
 </head>
 
@@ -410,6 +563,7 @@
             <div class="score-label">Best</div>
             <div class="score-value" id="best-score">0</div>
         </div>
+        <button class="ranking-btn" id="ranking-btn" type="button">🏆 랭킹</button>
     </div>
     <div id="game-container">
         <div class="grid-container" id="grid-bg"></div>
@@ -419,7 +573,28 @@
         <div class="game-over-content">
             <div class="game-over-title">GAME OVER</div>
             <div class="game-over-score">최종 점수: <span id="final-score">0</span></div>
+
+            <form class="submit-form" id="submit-form" onsubmit="event.preventDefault(); handleSubmitScore();">
+                <input type="text" id="nickname-input" maxlength="12" placeholder="닉네임 (1~12자)" autocomplete="off" />
+                <button class="submit-btn" id="submit-btn" type="submit">점수 제출</button>
+            </form>
+
+            <div class="lb-error" id="lb-error" hidden></div>
+
+            <div class="lb-section" id="leaderboard-section" hidden>
+                <div class="lb-title">리더보드 TOP 10</div>
+                <ol class="leaderboard-list" id="leaderboard-list"></ol>
+            </div>
+
             <button class="restart-btn" onclick="restart()">다시 시작</button>
+        </div>
+    </div>
+
+    <div id="leaderboard-overlay">
+        <div class="lb-content">
+            <div class="lb-title">리더보드 TOP 10</div>
+            <ol class="leaderboard-list" id="lb-only-list"></ol>
+            <button class="restart-btn" id="lb-close" type="button">닫기</button>
         </div>
     </div>
 
@@ -429,18 +604,46 @@
         const bestScoreDisplay = document.getElementById('best-score');
         const gameOverOverlay = document.getElementById('game-over-overlay');
         const finalScoreDisplay = document.getElementById('final-score');
+        const restartBtn = document.querySelector('.restart-btn');
         let board = [];
         let score = 0;
         let bestScore = parseInt(localStorage.getItem('bestScore')) || 0;
         let tileIdCounter = 0;
         let gameOver = false;
 
+        // 1A: 셀 측정 캐시 (모바일/리사이즈 대응)
+        let gridMetrics = { tileSize: 102, stepX: 118, stepY: 118, originX: 16, originY: 16 };
+
+        function measureGrid() {
+            const cells = document.querySelectorAll('#grid-bg .grid-cell');
+            if (cells.length < 5) return;
+            const containerRect = gameContainer.getBoundingClientRect();
+            const r0 = cells[0].getBoundingClientRect();
+            const r1 = cells[1].getBoundingClientRect();    // 같은 행, 다음 열
+            const r4 = cells[4].getBoundingClientRect();    // 다음 행, 같은 열
+            gridMetrics = {
+                tileSize: r0.width,
+                stepX: r1.left - r0.left,
+                stepY: r4.top - r0.top,
+                originX: r0.left - containerRect.left,
+                originY: r0.top - containerRect.top,
+            };
+            // 모든 타일 크기 동기화
+            document.querySelectorAll('.tile').forEach(el => {
+                el.style.width = gridMetrics.tileSize + 'px';
+                el.style.height = gridMetrics.tileSize + 'px';
+            });
+        }
+
+        function getPosX(col) { return gridMetrics.originX + col * gridMetrics.stepX; }
+        function getPosY(row) { return gridMetrics.originY + row * gridMetrics.stepY; }
+
         function init() {
             board = Array.from({ length: 4 }, () => Array(4).fill(null));
             score = 0;
             gameOver = false;
             gameOverOverlay.classList.remove('show');
-            
+
             const bg = document.getElementById('grid-bg');
             bg.innerHTML = '';
             for (let i = 0; i < 16; i++) {
@@ -449,87 +652,85 @@
                 bg.appendChild(cell);
             }
             bestScoreDisplay.innerText = bestScore;
-            generate(); 
+            measureGrid();
+            generate();
             generate();
             render();
         }
 
         function restart() {
-            // 모든 타일 제거
             document.querySelectorAll('.tile').forEach(el => el.remove());
             init();
         }
 
-        function getPos(pos) { return 16 + (pos * 118); }
-
-        function render() {
+        function updateScore() {
             scoreDisplay.innerText = score;
             if (score > bestScore) {
                 bestScore = score;
                 localStorage.setItem('bestScore', bestScore);
                 bestScoreDisplay.innerText = bestScore;
             }
-            
+        }
+
+        function render() {
+            updateScore();
+
             const currentTileElements = document.querySelectorAll('.tile');
             const aliveIds = new Set();
 
             for (let i = 0; i < 4; i++) {
                 for (let j = 0; j < 4; j++) {
                     const tileData = board[i][j];
-                    if (tileData) {
-                        aliveIds.add(tileData.id.toString());
-                        let tileEl = document.querySelector(`.tile[data-id="${tileData.id}"]`);
+                    if (!tileData) continue;
 
-                        const isNew = !tileEl;
-                        const isActuallyNew = isNew && tileData.previousRow === undefined;
-                        
-                        if (!tileEl) {
-                            tileEl = document.createElement('div');
-                            tileEl.classList.add('tile');
-                            tileEl.dataset.id = tileData.id;
-                            gameContainer.appendChild(tileEl);
-                            
-                            // 새 타일은 이전 위치가 현재 위치와 같음
-                            if (tileData.previousRow === undefined) {
-                                tileData.previousRow = i;
-                                tileData.previousCol = j;
-                            }
+                    aliveIds.add(tileData.id.toString());
+                    let tileEl = document.querySelector(`.tile[data-id="${tileData.id}"]`);
+
+                    const isNew = !tileEl;
+                    const isActuallyNew = isNew && tileData.previousRow === undefined;
+
+                    if (!tileEl) {
+                        tileEl = document.createElement('div');
+                        tileEl.classList.add('tile');
+                        tileEl.dataset.id = tileData.id;
+                        tileEl.style.width = gridMetrics.tileSize + 'px';
+                        tileEl.style.height = gridMetrics.tileSize + 'px';
+                        gameContainer.appendChild(tileEl);
+
+                        if (tileData.previousRow === undefined) {
+                            tileData.previousRow = i;
+                            tileData.previousCol = j;
                         }
-
-                        // 이전 위치에서 시작
-                        const prevRow = tileData.previousRow !== undefined ? tileData.previousRow : i;
-                        const prevCol = tileData.previousCol !== undefined ? tileData.previousCol : j;
-                        
-                        if (isNew) {
-                            tileEl.style.top = getPos(prevRow) + 'px';
-                            tileEl.style.left = getPos(prevCol) + 'px';
-                        }
-
-                        // 다음 프레임에서 이동
-                        requestAnimationFrame(() => {
-                            tileEl.style.top = getPos(i) + 'px';
-                            tileEl.style.left = getPos(j) + 'px';
-                            tileEl.innerText = tileData.value;
-                            tileEl.setAttribute('data-value', tileData.value);
-                            tileEl.style.zIndex = tileData.value;
-                            
-                            // generate()로 새로 생성된 타일만 new 애니메이션
-                            if (isActuallyNew) {
-                                tileEl.classList.add('new');
-                            }
-                            
-                            // 합쳐진 타일은 merged 애니메이션만
-                            if (tileData.mergedFrom) {
-                                tileEl.classList.add('merged');
-                                setTimeout(() => tileEl.classList.remove('merged'), 250);
-                                delete tileData.mergedFrom;
-                            }
-                        });
                     }
+
+                    const prevRow = tileData.previousRow !== undefined ? tileData.previousRow : i;
+                    const prevCol = tileData.previousCol !== undefined ? tileData.previousCol : j;
+
+                    if (isNew) {
+                        tileEl.style.top = getPosY(prevRow) + 'px';
+                        tileEl.style.left = getPosX(prevCol) + 'px';
+                    }
+
+                    requestAnimationFrame(() => {
+                        tileEl.style.top = getPosY(i) + 'px';
+                        tileEl.style.left = getPosX(j) + 'px';
+                        tileEl.innerText = tileData.value;
+                        tileEl.setAttribute('data-value', tileData.value);
+                        tileEl.style.zIndex = tileData.value;
+
+                        if (isActuallyNew) {
+                            tileEl.classList.add('new');
+                        }
+
+                        if (tileData.mergedFrom) {
+                            tileEl.classList.add('merged');
+                            setTimeout(() => tileEl.classList.remove('merged'), 250);
+                            delete tileData.mergedFrom;
+                        }
+                    });
                 }
             }
 
-            // 사라진 타일들 처리
             currentTileElements.forEach(el => {
                 if (!aliveIds.has(el.dataset.id)) {
                     el.classList.add('merged-from');
@@ -546,34 +747,36 @@
 
             if (empty.length > 0) {
                 let { r, c } = empty[Math.floor(Math.random() * empty.length)];
-                board[r][c] = { 
-                    value: 2, 
+                board[r][c] = {
+                    value: 2,
                     id: tileIdCounter++,
                     previousRow: r,
-                    previousCol: c
+                    previousCol: c,
                 };
             }
         }
 
-        function slide(row, rowIndex, isVertical) {
+        // 1B: moved 플래그를 반환해 JSON.stringify 비교 제거
+        function slide(row) {
             let newRow = row.filter(v => v !== null);
-            let merged = [];
-            
+            let moved = newRow.length !== row.length || newRow.some((t, idx) => row[idx] !== t);
+
             for (let i = 0; i < newRow.length - 1; i++) {
                 if (newRow[i].value === newRow[i + 1].value) {
-                    newRow[i] = { 
-                        value: newRow[i].value * 2, 
+                    newRow[i] = {
+                        value: newRow[i].value * 2,
                         id: newRow[i].id,
-                        mergedFrom: [newRow[i].id, newRow[i + 1].id]
+                        mergedFrom: [newRow[i].id, newRow[i + 1].id],
                     };
                     score += newRow[i].value;
-                    merged.push(newRow[i + 1].id);
+                    updateScore(); // 1G: 머지 즉시 점수 반영
                     newRow.splice(i + 1, 1);
+                    moved = true;
                 }
             }
-            
+
             while (newRow.length < 4) newRow.push(null);
-            return newRow;
+            return { row: newRow, moved };
         }
 
         function savePositions() {
@@ -588,59 +791,50 @@
         }
 
         function move(dir) {
-            let oldBoard = JSON.stringify(board);
-            
-            // 이동 전 위치 저장
+            // USP 유지: 빠른 연타에도 입력을 즉시 처리. gameOver만 차단.
+            if (gameOver) return;
+
             savePositions();
+            let moved = false;
 
             if (dir === 'Left' || dir === 'Right') {
                 for (let i = 0; i < 4; i++) {
                     if (dir === 'Right') board[i].reverse();
-                    board[i] = slide(board[i], i, false);
+                    const result = slide(board[i]);
+                    board[i] = result.row;
                     if (dir === 'Right') board[i].reverse();
+                    if (result.moved) moved = true;
                 }
             } else {
                 board = rotate(board);
                 for (let i = 0; i < 4; i++) {
                     if (dir === 'Down') board[i].reverse();
-                    board[i] = slide(board[i], i, true);
+                    const result = slide(board[i]);
+                    board[i] = result.row;
                     if (dir === 'Down') board[i].reverse();
+                    if (result.moved) moved = true;
                 }
                 board = rotate(board);
             }
 
-            if (oldBoard !== JSON.stringify(board)) {
+            if (!moved) return;
+
+            render();
+
+            setTimeout(() => {
+                generate();
                 render();
 
-                setTimeout(() => {
-                    generate();
-                    render();
-
-                    if (checkGameOver()) {
-                        gameOver = true;
-                        setTimeout(() => {
-                            finalScoreDisplay.innerText = score;
-                            gameOverOverlay.classList.add('show');
-                        }, 300);
-                    }
-                }, 180);
-            }
+                if (checkGameOver()) {
+                    gameOver = true;
+                    setTimeout(showGameOverModal, 300);
+                }
+            }, 180);
         }
 
-        function rotate(m) { 
-            const rotated = m[0].map((_, i) => m.map(row => row[i]));
-            // 회전 후 previousPosition도 같이 변환
-            for (let i = 0; i < 4; i++) {
-                for (let j = 0; j < 4; j++) {
-                    if (rotated[i][j] && rotated[i][j].previousRow !== undefined) {
-                        const oldPrevRow = rotated[i][j].previousRow;
-                        const oldPrevCol = rotated[i][j].previousCol;
-                        rotated[i][j].previousRow = oldPrevCol;
-                        rotated[i][j].previousCol = 3 - oldPrevRow;
-                    }
-                }
-            }
-            return rotated;
+        // 1D: rotate에서 previousRow/Col을 변환하지 않음. render는 항상 원본 좌표계 기준.
+        function rotate(m) {
+            return m[0].map((_, i) => m.map(row => row[i]));
         }
 
         function checkGameOver() {
@@ -665,7 +859,7 @@
             }
         });
 
-        // 모바일 터치 지원
+        // 1E: clientX/Y 사용 (멀티 모니터/줌 안정)
         let touchStartX = 0;
         let touchStartY = 0;
         let touchEndX = 0;
@@ -673,14 +867,14 @@
 
         gameContainer.addEventListener('touchstart', e => {
             if (gameOver) return;
-            touchStartX = e.changedTouches[0].screenX;
-            touchStartY = e.changedTouches[0].screenY;
+            touchStartX = e.changedTouches[0].clientX;
+            touchStartY = e.changedTouches[0].clientY;
         }, { passive: true });
 
         gameContainer.addEventListener('touchend', e => {
             if (gameOver) return;
-            touchEndX = e.changedTouches[0].screenX;
-            touchEndY = e.changedTouches[0].screenY;
+            touchEndX = e.changedTouches[0].clientX;
+            touchEndY = e.changedTouches[0].clientY;
             handleSwipe();
         }, { passive: true });
 
@@ -689,27 +883,180 @@
             const deltaY = touchEndY - touchStartY;
             const minSwipeDistance = 30;
 
-            // 수평/수직 중 더 큰 움직임 판단
-            if (Math.abs(deltaX) < minSwipeDistance && Math.abs(deltaY) < minSwipeDistance) {
-                return; // 너무 짧은 스와이프 무시
-            }
+            if (Math.abs(deltaX) < minSwipeDistance && Math.abs(deltaY) < minSwipeDistance) return;
 
             if (Math.abs(deltaX) > Math.abs(deltaY)) {
-                // 수평 스와이프
-                if (deltaX > 0) {
-                    move('Right');
-                } else {
-                    move('Left');
-                }
+                move(deltaX > 0 ? 'Right' : 'Left');
             } else {
-                // 수직 스와이프
-                if (deltaY > 0) {
-                    move('Down');
-                } else {
-                    move('Up');
-                }
+                move(deltaY > 0 ? 'Down' : 'Up');
             }
         }
+
+        // 1A: 리사이즈 시 그리드 메트릭 재측정 + 타일 위치 갱신
+        let resizeTimer = null;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                measureGrid();
+                // 모든 타일을 현재 좌표로 재배치
+                for (let i = 0; i < 4; i++) {
+                    for (let j = 0; j < 4; j++) {
+                        const t = board[i][j];
+                        if (!t) continue;
+                        const el = document.querySelector(`.tile[data-id="${t.id}"]`);
+                        if (!el) continue;
+                        el.style.top = getPosY(i) + 'px';
+                        el.style.left = getPosX(j) + 'px';
+                    }
+                }
+            }, 100);
+        });
+
+        // ============================
+        // 작업 3: Supabase 리더보드
+        // ============================
+        const SUPABASE_URL = 'https://gtsvkpizhsyidmtoyoxv.supabase.co';
+        const SUPABASE_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd0c3ZrcGl6aHN5aWRtdG95b3h2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcwOTE5OTIsImV4cCI6MjA5MjY2Nzk5Mn0.MKqCdTiswt9VTMvXhvJAL8E3heNZDWWDduDkyn5YFDI';
+        const NICK_RE = /^[A-Za-z0-9가-힣 _\-]+$/;
+
+        const submitForm = document.getElementById('submit-form');
+        const nicknameInput = document.getElementById('nickname-input');
+        const submitBtn = document.getElementById('submit-btn');
+        const lbErrorEl = document.getElementById('lb-error');
+        const lbSection = document.getElementById('leaderboard-section');
+        const lbList = document.getElementById('leaderboard-list');
+        const rankingBtn = document.getElementById('ranking-btn');
+        const lbOverlay = document.getElementById('leaderboard-overlay');
+        const lbOnlyList = document.getElementById('lb-only-list');
+        const lbCloseBtn = document.getElementById('lb-close');
+
+        async function submitScore(nickname, scoreVal) {
+            const r = await fetch(`${SUPABASE_URL}/rest/v1/leaderboard`, {
+                method: 'POST',
+                headers: {
+                    'apikey': SUPABASE_ANON,
+                    'Authorization': `Bearer ${SUPABASE_ANON}`,
+                    'Content-Type': 'application/json',
+                    'Prefer': 'return=minimal',
+                },
+                body: JSON.stringify({ nickname, score: scoreVal }),
+            });
+            if (!r.ok) {
+                let detail = '';
+                try { detail = (await r.text()).slice(0, 200); } catch (_) {}
+                throw new Error(`HTTP ${r.status} ${detail}`);
+            }
+        }
+
+        async function fetchTop(limit = 10) {
+            const url = `${SUPABASE_URL}/rest/v1/leaderboard?select=nickname,score,created_at&order=score.desc,created_at.asc&limit=${limit}`;
+            const r = await fetch(url, {
+                headers: {
+                    'apikey': SUPABASE_ANON,
+                    'Authorization': `Bearer ${SUPABASE_ANON}`,
+                },
+            });
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            return await r.json();
+        }
+
+        function renderLeaderboard(listEl, rows, highlight) {
+            listEl.innerHTML = '';
+            if (!rows || !rows.length) {
+                const li = document.createElement('li');
+                li.textContent = '아직 기록이 없습니다';
+                listEl.appendChild(li);
+                return;
+            }
+            rows.forEach((row, idx) => {
+                const li = document.createElement('li');
+                if (highlight && row.nickname === highlight.nickname && row.score === highlight.score) {
+                    li.classList.add('me');
+                }
+                const rk = document.createElement('span'); rk.className = 'rank'; rk.textContent = (idx + 1) + '.';
+                const nk = document.createElement('span'); nk.className = 'nick'; nk.textContent = row.nickname; // XSS 방어: textContent
+                const sc = document.createElement('span'); sc.className = 'sc'; sc.textContent = Number(row.score).toLocaleString();
+                li.append(rk, nk, sc);
+                listEl.appendChild(li);
+            });
+        }
+
+        function showSubmitError(msg) {
+            lbErrorEl.textContent = msg;
+            lbErrorEl.hidden = false;
+        }
+        function clearSubmitError() {
+            lbErrorEl.hidden = true;
+            lbErrorEl.textContent = '';
+        }
+
+        async function handleSubmitScore() {
+            const nickname = (nicknameInput.value || '').trim();
+            if (!nickname || nickname.length > 12 || !NICK_RE.test(nickname)) {
+                showSubmitError('닉네임은 한글/영문/숫자/공백/_/- 1~12자로 입력해주세요.');
+                return;
+            }
+            const submittedKey = 'submitted_' + score;
+            if (sessionStorage.getItem(submittedKey)) {
+                showSubmitError('이미 제출된 점수입니다.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            nicknameInput.disabled = true;
+            submitBtn.textContent = '제출 중...';
+            clearSubmitError();
+            try {
+                await submitScore(nickname, score);
+                localStorage.setItem('nickname', nickname);
+                sessionStorage.setItem(submittedKey, '1');
+                submitForm.hidden = true;
+                try {
+                    const rows = await fetchTop(10);
+                    renderLeaderboard(lbList, rows, { nickname, score });
+                } catch (e) {
+                    renderLeaderboard(lbList, [], null);
+                    showSubmitError('점수는 제출됐지만 리더보드를 불러오지 못했습니다.');
+                }
+                lbSection.hidden = false;
+            } catch (e) {
+                showSubmitError('점수 제출 실패: 네트워크 또는 서버 오류. 잠시 후 다시 시도해주세요.');
+            } finally {
+                submitBtn.disabled = false;
+                nicknameInput.disabled = false;
+                submitBtn.textContent = '점수 제출';
+            }
+        }
+
+        function showGameOverModal() {
+            finalScoreDisplay.innerText = score;
+            submitForm.hidden = false;
+            lbSection.hidden = true;
+            clearSubmitError();
+            nicknameInput.value = localStorage.getItem('nickname') || '';
+            nicknameInput.disabled = false;
+            submitBtn.disabled = false;
+            submitBtn.textContent = '점수 제출';
+            gameOverOverlay.classList.add('show');
+            // 1F: 닉네임 입력에 포커스 (모바일에선 키보드 자동 노출 방지 위해 미세 지연)
+            setTimeout(() => nicknameInput.focus({ preventScroll: true }), 50);
+        }
+
+        // 🏆 랭킹 버튼: 게임 중에도 리더보드 보기
+        rankingBtn.addEventListener('click', async () => {
+            lbOverlay.classList.add('show');
+            lbOnlyList.innerHTML = '<li>불러오는 중...</li>';
+            try {
+                const rows = await fetchTop(10);
+                renderLeaderboard(lbOnlyList, rows, null);
+            } catch (e) {
+                lbOnlyList.innerHTML = '<li>리더보드를 불러오지 못했습니다.</li>';
+            }
+        });
+        lbCloseBtn.addEventListener('click', () => lbOverlay.classList.remove('show'));
+        lbOverlay.addEventListener('click', e => {
+            if (e.target === lbOverlay) lbOverlay.classList.remove('show');
+        });
 
         init();
     </script>
